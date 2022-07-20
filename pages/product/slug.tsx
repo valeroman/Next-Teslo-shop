@@ -11,23 +11,23 @@ const ProductPage = () => {
   return (
     <ShopLayout title={ product.title } pageDescription={ product.description }>
 
-      <Grid container spacing={3} sx={{ backgroundColor: 'green' }}>
+      <Grid container spacing={3}>
 
-        <Grid item xs={12} sm={7} sx={{ backgroundColor: 'orange' }}>
+        <Grid item xs={12} sm={7}>
           <ProductSlideshow 
             images={ product.images }
           />
         </Grid>
 
-        <Grid item xs={12} sm={5} sx={{ backgroundColor: 'yellow' }}>
+        <Grid item xs={12} sm={5}>
           <Box display='flex' flexDirection='column'>
             
-            {/* titulos */}
+            {/* titulo */}
             <Typography variant='h1' component='h1'>{ product.title }</Typography>
             <Typography variant='subtitle1' component='h2'>{ `$${ product.price }` }</Typography>
 
             {/* cantidad */}
-            <Box sx={{ my: 2, backgroundColor: 'pink' }}>
+            <Box sx={{ my: 2 }}>
               {/* Se puede editar la cantidad */}
               <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter />
