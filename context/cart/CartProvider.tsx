@@ -12,7 +12,7 @@ export interface CartState {
     subTotal: number,
     tax: number,
     total: number,
-    // shippingAddress?: ShippingAddress;
+    shippingAddress?: ShippingAddress;
 }
 
 export interface ShippingAddress {
@@ -33,7 +33,7 @@ const CART_INITIAL_STATE: CartState = {
     subTotal: 0,
     tax: 0,
     total: 0,
-    // shippingAddress: undefined
+    shippingAddress: undefined
 }
 
 export const CartProvider:FC<CartState> = ({ children }) => {
@@ -52,28 +52,32 @@ export const CartProvider:FC<CartState> = ({ children }) => {
         
     },[]);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if ( Cookie.get('firstName') ) {
+        if ( Cookie.get('firstName') ) {
 
-    //         const shippingAddress = {
-    //             firstName : Cookie.get('firstName') || '',
-    //             lastName  : Cookie.get('lastName') || '',
-    //             address   : Cookie.get('address') || '',
-    //             address2  : Cookie.get('address2') || '',
-    //             zip       : Cookie.get('zip') || '',
-    //             city      : Cookie.get('city') || '',
-    //             country   : Cookie.get('country') || '',
-    //             phone     : Cookie.get('phone') || '',
-    //         }
+            const shippingAddress = {
+                firstName : Cookie.get('firstName') || '',
+                lastName  : Cookie.get('lastName') || '',
+                address   : Cookie.get('address') || '',
+                address2  : Cookie.get('address2') || '',
+                zip       : Cookie.get('zip') || '',
+                city      : Cookie.get('city') || '',
+                country   : Cookie.get('country') || '',
+                phone     : Cookie.get('phone') || '',
+            }
     
-    //         dispatch({ type:'[Cart] - LoadCart from cookies | storage', payload: shippingAddress })
-    //     }
+            dispatch({ type:'[Cart] - Load Address from Cookies', payload: shippingAddress })
+        }
 
-    // },[])
+    },[])
 
     useEffect(() => {
-        Cookie.set('cart', JSON.stringify( state.cart ));
+        if ( state.cart.length > 0 ) {
+            Cookie.set('cart', JSON.stringify( state.cart ));
+        }
+        // dispatch({ type: "[Cart] - Order Complete" });
+        // Cookie.set("cart", JSON.stringify([]));
     },[state.cart]);
 
     useEffect(() => {
@@ -130,6 +134,20 @@ export const CartProvider:FC<CartState> = ({ children }) => {
         dispatch({ type: '[Cart] - Remove product in cart', payload: product });
     }
 
+    const updateAddress = ( address: ShippingAddress ) => {
+
+        Cookie.set('firstName',address.firstName);
+        Cookie.set('lastName',address.lastName);
+        Cookie.set('address',address.address);
+        Cookie.set('address2',address.address2 || '');
+        Cookie.set('zip',address.zip);
+        Cookie.set('city',address.city);
+        Cookie.set('country',address.country);
+        Cookie.set('phone',address.phone);
+        
+        dispatch({ type: '[Cart] - Load Address from Cookies', payload: address });
+    }
+
     return (
         <CartContext.Provider value={{
             ...state,
@@ -137,7 +155,8 @@ export const CartProvider:FC<CartState> = ({ children }) => {
             // Methods
             addProductToCart,
             updateQuantity,
-            removeCartProduct
+            removeCartProduct,
+            updateAddress
         }}>
             { children }
         </CartContext.Provider>

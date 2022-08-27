@@ -11,12 +11,13 @@ interface ContextProps {
     tax: number,
     total: number,
 
-    // shippingAddress?: ShippingAddress,
+    shippingAddress?: ShippingAddress,
 
     // Methods
     addProductToCart: (product: ICartProduct) => void;
     updateQuantity: (product: ICartProduct) => void;
     removeCartProduct: (product: ICartProduct) => void;
+    updateAddress: (address: ShippingAddress) => void;
 }
 
 

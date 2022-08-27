@@ -5,6 +5,8 @@ import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from 
 import { ShopLayout } from '../../components/layouts';
 import { countries } from '../../utils';
 import Cookies from 'js-cookie';
+import { CartContext } from '../../context/cart/CartContext';
+import { useContext } from 'react';
 
 type FormData = {
     firstName: string;
@@ -35,21 +37,14 @@ const AddressPage = () => {
 
     const router = useRouter();
 
+    const { updateAddress } = useContext(CartContext);
+
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         defaultValues: getAddressFromCookies()
     });
 
-    const onAddressUser = async( { firstName, lastName, address, address2, zip, city, country, phone }: FormData ) => {
-        
-        Cookies.set('firstName',firstName);
-        Cookies.set('lastName',lastName);
-        Cookies.set('address',address);
-        Cookies.set('address2',address2 || '');
-        Cookies.set('zip',zip);
-        Cookies.set('city',city);
-        Cookies.set('country',country);
-        Cookies.set('phone',phone);
-        
+    const onAddressUser = async( data: FormData ) => {
+        updateAddress(data);
         router.push('/checkout/summary');
     }
 
@@ -138,10 +133,11 @@ const AddressPage = () => {
                     <Grid item xs={ 12 } sm={ 6 }>
                         <FormControl fullWidth>
                             <TextField
+                                key={Cookies.get('country') || countries[0].code }
                                 select
                                 variant='filled'
                                 label="País"
-                                defaultValue={ countries[0].code }
+                                defaultValue={ Cookies.get('country') || countries[0].code }
                                 { ...register('country', {
                                     required: 'Este campo es requerido',
                                 })}
