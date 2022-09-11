@@ -6,7 +6,7 @@ import { ShopLayout } from '../../components/layouts';
 import { countries } from '../../utils';
 import Cookies from 'js-cookie';
 import { CartContext } from '../../context/cart/CartContext';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 type FormData = {
     firstName: string;
@@ -39,9 +39,24 @@ const AddressPage = () => {
 
     const { updateAddress } = useContext(CartContext);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-        defaultValues: getAddressFromCookies()
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+        defaultValues: {
+            firstName : '',
+            lastName  : '',
+            address   : '',
+            address2  : '',
+            zip       : '',
+            city      : '',
+            country   : countries[0].code,
+            phone     : ''
+    
+        }
     });
+
+    useEffect(() => {
+        reset(getAddressFromCookies());
+    }, [reset])
+    
 
     const onAddressUser = async( data: FormData ) => {
         updateAddress(data);
