@@ -57,6 +57,7 @@ const createOrder = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         // Todo bien hasta este punto
         const userId = session.user._id;
         const newOrder = new Order({ ...req.body, isPaid: false, user: userId });
+        
         await newOrder.save();
         await db.disconnect();
         return res.status(201).json( newOrder );
