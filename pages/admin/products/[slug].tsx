@@ -105,7 +105,6 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                 const formData = new FormData();
                 formData.append('file', file);
                 const { data } = await tesloApi.post<{ message: string }>('/admin/upload', formData);
-                // console.log('data-->',data.message);
                 setValue('images', [ ...getValues('images'), data.message ], { shouldValidate: true })
             }
             

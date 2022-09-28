@@ -32,7 +32,6 @@ const saveFile = async( file: formidable.File ): Promise<string> => {
     // fs.writeFileSync(`./public/${ file.originalFilename }`, data);
     // fs.unlinkSync( file.filepath );
     // return;
-
     const { secure_url } = await cloudinary.uploader.upload(file.filepath);
     return secure_url;
 }
@@ -42,7 +41,6 @@ const parseFiles = async(req: NextApiRequest): Promise<string> => {
     return new Promise( (resolve, reject) => {
         const form = new formidable.IncomingForm();
         form.parse( req, async( err, fields, files) => {
-            // console.log({ err, fields, files });
 
             if (err) {
                 return reject(err);
